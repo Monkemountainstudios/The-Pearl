@@ -206,7 +206,7 @@ async function initAudio() {
         audioCtx.createGain();
 
     masterGain.gain.value =
-        0.78;
+        0.48;
 
 
     masterHPF
@@ -235,12 +235,12 @@ async function initAudio() {
 
         createReverbBus(
             5.0,
-            3.4
+            4.4
         ),
 
         createReverbBus(
             8.0,
-            4.2
+            7.2
         )
 
     ];
