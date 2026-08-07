@@ -105,25 +105,24 @@ const WATER_AUDIO_URL =
 const SOURCE_MIDI = 60;
 
 
-/*
-    First scale just for testing.
+const scales = {
+    major:      [0, 2, 4, 5, 7, 9, 11],
+    minor:      [0, 2, 3, 5, 7, 8, 10],
+    dorian:     [0, 2, 3, 5, 7, 9, 10],
+    lydian:     [0, 2, 4, 6, 7, 9, 11],
+    mixolydian: [0, 2, 4, 5, 7, 9, 10],
+	pentatonic: [0, 2, 4, 7, 9],
+	wholetone:  [0, 2, 4, 6, 8, 10]
+};
+let currentScale = scales.minor;
 
-    C minor:
-    C D Eb F G Ab Bb
+const scaleSelect = document.getElementById("scaleSelect");
 
-    Later this becomes the Scale selector.
-*/
+scaleSelect.addEventListener("change", () => {
 
-let currentScale = [
-    0,
-    2,
-    3,
-    5,
-    7,
-    8,
-    10
-];
+    currentScale = scales[scaleSelect.value];
 
+});
 
 /*
     Four octaves of usable notes.
