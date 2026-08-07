@@ -781,6 +781,8 @@ function spawnColourDrop() {
   const c = palette[Math.floor(Math.random() * palette.length)];
   const strong = Math.random() < 0.06;
   const character = randomRange(-1, 1);
+	const cx = randomRange(4, GRID_W - 5);
+  const cy = randomRange(4, GRID_H - 5);
 
   const radius = randomRange(2.4, 32.6) * (1 + character * 0.05);
   const amount = strong
@@ -820,10 +822,8 @@ function spawnWaterDrop() {
   const character = randomRange(-1, 1);
   const radius = randomRange(2.4, 22.8) * (1 + character * 0.04);
   const amount = randomRange(1.05, 1.55);
-
-  const cx = randomRange(4, GRID_W - 5);
+const cx = randomRange(4, GRID_W - 5);
   const cy = randomRange(4, GRID_H - 5);
-
   addWaterDisk(cx, cy, radius, amount);
 
   playWaterNote(
