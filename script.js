@@ -105,8 +105,6 @@ const SOUNDSETS = {
     }
 };
 
-let bonkersMode = false;
-
 let saneColourBuffer = null;
 let saneWaterBuffer = null;
 let bonkersColourBuffer = null;
