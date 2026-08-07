@@ -21,6 +21,23 @@ const colourValue = document.getElementById("colourValue");
 const waterValue = document.getElementById("waterValue");
 const startButton = document.getElementById("startButton");
 const clearButton = document.getElementById("clearButton");
+const soundModeBtn = document.getElementById("soundModeBtn");
+
+let bonkersMode = false;
+
+soundModeBtn.addEventListener("click", () => {
+
+    bonkersMode = !bonkersMode;
+
+    if (bonkersMode) {
+        currentSoundSet = SOUNDSETS.bonkers;
+        soundModeBtn.textContent = "Bonkers";
+    } else {
+        currentSoundSet = SOUNDSETS.sane;
+        soundModeBtn.textContent = "Sane";
+    }
+
+});
 
 const PAPER = { r: 255, g: 252, b: 236 };
 
@@ -33,10 +50,11 @@ const palette = [
   { name: "green",       r: 74,  g: 145, b: 94  },
   { name: "yellow",      r: 221, g: 184, b: 72  },
   { name: "orange",      r: 212, g: 128, b: 69  },
-  { name: "brown",       r: 245, g: 245, b: 212  },
-  { name: "hotpink",      r: 255, g: 2, b: 127  },
-  { name: "pearl",      r: 255, g: 255, b: 232  },
-  { name: "teal",        r: 63,  g: 157, b: 156 }
+  { name: "brown",       r: 245, g: 245, b: 232  },
+  { name: "hotpink",     r: 255, g: 2, b: 127  },
+  { name: "pearl",       r: 255, g: 255, b: 232  },
+  { name: "flarn",       r: 12, g: 42, b: 35  },
+  { name: "teal",        r: 063,  g: 157, b: 156 }
 ];
 
 // Simulation dimensions are intentionally modest.
@@ -89,12 +107,19 @@ let audioReady = false;
     to match your actual .ogg files.
 */
 
-const COLOUR_AUDIO_URL =
-    "audio/c.ogg";
+const SOUNDSETS = {
+    sane: {
+        colour: "audio/c.ogg",
+        water: "audio/c_reverse.ogg"
+    },
 
-const WATER_AUDIO_URL =
-    "audio/c_reverse.ogg";
+    bonkers: {
+        colour: "audio/fuap.ogg",
+        water: "audio/pop.ogg"
+    }
+};
 
+let currentSoundSet = SOUNDSETS.sane;
 
 /*
     The sample is a C.
@@ -112,6 +137,7 @@ const scales = {
     lydian:     [0, 2, 4, 6, 7, 9, 11],
     mixolydian: [0, 2, 4, 5, 7, 9, 10],
 	pentatonic: [0, 2, 4, 7, 9],
+	ragatodi:	[0, 1, 3, 6, 7, 9, 10, 11]
 	wholetone:  [0, 2, 4, 6, 8, 10]
 };
 let currentScale = scales.minor;
@@ -254,8 +280,8 @@ async function initAudio() {
         waterResponse
     ] =
         await Promise.all([
-            fetch(COLOUR_AUDIO_URL),
-            fetch(WATER_AUDIO_URL)
+            fetch(currentSoundSet.colour),
+            fetch(currentSoundSet.water)
         ]);
 
 
@@ -1315,7 +1341,24 @@ function render() {
   const rect = canvas.getBoundingClientRect();
   ctx.clearRect(0, 0, rect.width, rect.height);
   ctx.imageSmoothingEnabled = true;
-  ctx.drawImage(imageCanvas, 0, 0, rect.width, rect.height);
+  const scale = Math.min(
+  rect.width / imageCanvas.width,
+  rect.height / imageCanvas.height
+);
+
+	const drawWidth = imageCanvas.width * scale;
+	const drawHeight = imageCanvas.height * scale;
+
+	const offsetX = (rect.width - drawWidth) / 2;
+	const offsetY = (rect.height - drawHeight) / 2;
+
+	ctx.drawImage(
+    	imageCanvas,
+    	offsetX,
+    	offsetY,
+    	drawWidth,
+    	drawHeight
+);
 }
 
 function frame(now) {
