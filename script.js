@@ -114,7 +114,6 @@ let bonkersWaterBuffer = null;
 
     MIDI 60 = middle C.
 */
-V1.11 
 const SOURCE_MIDI = 60;
 
 
