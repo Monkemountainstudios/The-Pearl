@@ -298,7 +298,7 @@ bonkersColourBuffer =
 bonkersWaterBuffer =
     await audioCtx.decodeAudioData(bonkersWaterData);
 
-audioReady = true;V1.11 
+audioReady = true;
 
 
 /* -------------------------------------------------------
