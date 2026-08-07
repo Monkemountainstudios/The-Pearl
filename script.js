@@ -21,10 +21,8 @@ soundModeBtn.addEventListener("click", () => {
     bonkersMode = !bonkersMode;
 
     if (bonkersMode) {
-        currentSoundSet = SOUNDSETS.bonkers;
         soundModeBtn.textContent = "Bonkers";
     } else {
-        currentSoundSet = SOUNDSETS.sane;
         soundModeBtn.textContent = "Sane";
     }
 
@@ -80,9 +78,6 @@ let session = makeSessionCharacter();
 ======================================================= */
 
 let audioCtx = null;
-
-let colourBuffer = null;
-let waterBuffer = null;
 
 let masterGain = null;
 let masterHPF = null;
@@ -300,6 +295,7 @@ bonkersWaterBuffer =
 
 audioReady = true;
 
+}
 
 /* -------------------------------------------------------
    PROCEDURAL REVERB
@@ -615,13 +611,14 @@ function playDropSound(
    SPECIFIC EVENT TYPES
 ------------------------------------------------------- */
 
-function playColourNote(
-    xNorm,
-    yNorm
-) {
+function playColourNote(xNorm, yNorm) {
+
+    const buffer = bonkersMode
+        ? bonkersColourBuffer
+        : saneColourBuffer;
 
     playDropSound(
-        colourBuffer,
+        buffer,
         xNorm,
         yNorm,
         false
@@ -629,13 +626,14 @@ function playColourNote(
 }
 
 
-function playWaterNote(
-    xNorm,
-    yNorm
-) {
+function playWaterNote(xNorm, yNorm) {
+
+    const buffer = bonkersMode
+        ? bonkersWaterBuffer
+        : saneWaterBuffer;
 
     playDropSound(
-        waterBuffer,
+        buffer,
         xNorm,
         yNorm,
         true
