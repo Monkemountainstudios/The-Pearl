@@ -418,9 +418,10 @@ function pitchFromX(xNorm) {
 
 
     const midi =
-        SOURCE_MIDI +
-        currentScale[degree] +
-        octave * 12;
+    SOURCE_MIDI +
+    currentScale[degree] +
+    octave * 12
+    - 12;
 
 
     return Math.pow(
@@ -546,7 +547,7 @@ function playDropSound(
 
     const wetAmount =
         randomRange(
-            0.28,
+            0.48,
             0.78
         );
 
