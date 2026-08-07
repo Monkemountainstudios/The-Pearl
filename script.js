@@ -1,15 +1,6 @@
 /*
-  THE PEARL — visual engine prototype
+  THE PEARL — V1.11 visual engine prototype
 
-  This version intentionally contains no audio yet.
-  It establishes the simulation architecture we can later connect to Web Audio.
-
-  Core ideas:
-  - pigment is stored in a coarse simulation grid
-  - colour mixing is based on pigment amounts, not paint-order compositing
-  - water is invisible and acts on pigment concentration
-  - water both dilutes pigment and pushes a little pigment outward
-  - each drop varies only within narrow, believable limits
 */
 
 const canvas = document.getElementById("canvas");
@@ -102,11 +93,6 @@ let reverbBuses = [];
 let audioReady = false;
 
 
-/*
-    CHANGE THESE TWO FILENAMES
-    to match your actual .ogg files.
-*/
-
 const SOUNDSETS = {
     sane: {
         colour: "audio/c.ogg",
@@ -119,14 +105,18 @@ const SOUNDSETS = {
     }
 };
 
-let currentSoundSet = SOUNDSETS.sane;
+let bonkersMode = false;
 
+let saneColourBuffer = null;
+let saneWaterBuffer = null;
+let bonkersColourBuffer = null;
+let bonkersWaterBuffer = null;
 /*
     The sample is a C.
 
     MIDI 60 = middle C.
 */
-
+V1.11 
 const SOURCE_MIDI = 60;
 
 
@@ -275,40 +265,43 @@ async function initAudio() {
         Load the two samples.
     */
 
-    const [
-        colourResponse,
-        waterResponse
-    ] =
-        await Promise.all([
-            fetch(currentSoundSet.colour),
-            fetch(currentSoundSet.water)
-        ]);
+const [
+    saneColourResponse,
+    saneWaterResponse,
+    bonkersColourResponse,
+    bonkersWaterResponse
+] = await Promise.all([
+    fetch(SOUNDSETS.sane.colour),
+    fetch(SOUNDSETS.sane.water),
+    fetch(SOUNDSETS.bonkers.colour),
+    fetch(SOUNDSETS.bonkers.water)
+]);
 
+const [
+    saneColourData,
+    saneWaterData,
+    bonkersColourData,
+    bonkersWaterData
+] = await Promise.all([
+    saneColourResponse.arrayBuffer(),
+    saneWaterResponse.arrayBuffer(),
+    bonkersColourResponse.arrayBuffer(),
+    bonkersWaterResponse.arrayBuffer()
+]);
 
-    const [
-        colourData,
-        waterData
-    ] =
-        await Promise.all([
-            colourResponse.arrayBuffer(),
-            waterResponse.arrayBuffer()
-        ]);
+saneColourBuffer =
+    await audioCtx.decodeAudioData(saneColourData);
 
+saneWaterBuffer =
+    await audioCtx.decodeAudioData(saneWaterData);
 
-    colourBuffer =
-        await audioCtx.decodeAudioData(
-            colourData
-        );
+bonkersColourBuffer =
+    await audioCtx.decodeAudioData(bonkersColourData);
 
+bonkersWaterBuffer =
+    await audioCtx.decodeAudioData(bonkersWaterData);
 
-    waterBuffer =
-        await audioCtx.decodeAudioData(
-            waterData
-        );
-
-
-    audioReady = true;
-}
+audioReady = true;V1.11 
 
 
 /* -------------------------------------------------------
@@ -446,7 +439,7 @@ function pitchFromX(xNorm) {
     SOURCE_MIDI +
     currentScale[degree] +
     octave * 12
-    - 12;
+    - 24;
 
 
     return Math.pow(
